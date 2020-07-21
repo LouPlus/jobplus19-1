@@ -5,4 +5,3 @@
 ## Contributors 
 
 * [助教 - 安西教练](https://github.com/Manchangdx)
-* [Clark](https://github.com/Kisslfcr)
