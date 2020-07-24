@@ -6,7 +6,7 @@ class Base:
     '''
 
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'asdfasdf'
-    SQLALCHEMY_TRACK_MODIFICATION = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class DevelopConfig(Base):
