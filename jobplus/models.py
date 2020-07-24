@@ -18,16 +18,16 @@ class Base(db.Model):
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
 
-
+#用户职位关系表，添加user_id,job_id外键，级联删除
 user_job = db.Table(
     'user_job',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id', ondelete='CASCADE')),
     db.Column('job_id', db.Integer, db.ForeignKey('job.id', ondelete='CASCADE'))
 )
 
-
 class User(Base, UserMixin):
-    __tablename__ = 'user'
+    '''用户表映射类
+    '''
 
     ROLE_USER = 10
     ROLE_COMPANY = 20
@@ -38,8 +38,11 @@ class User(Base, UserMixin):
     email = db.Column(db.String(64), unique=True, index=True, nullable=False)
     _password = db.Column('password', db.String(256), nullable=False)
     role = db.Column(db.SmallInteger, default=ROLE_USER)
+    #简历
     resume = db.relationship('Resume', uselist=False)
+    #用户投递职位关联user_job表
     collect_jobs = db.relationship('Job', secondary=user_job)
+    #简历名称
     upload_resume_url = db.Column(db.String(64))
 
     def __repr__(self):
@@ -64,7 +67,7 @@ class User(Base, UserMixin):
     def is_company(self):
         return self.role == self.ROLE_COMPANY
 
-
+#简历表，暂时用不上
 class Resume(Base):
     __tablename__ = 'resume'
 
@@ -78,7 +81,7 @@ class Resume(Base):
     def profile(self):
         pass
 
-
+#简历中的获奖经历表，暂时用不上
 class Experience(Base):
     __abstract__ = True
 
@@ -90,7 +93,7 @@ class Experience(Base):
     # 项目期间，做了什么，解决了什么问题，做出了什么贡献
     description = db.Column(db.String(1024))
 
-
+#简历中的工作经历表，暂时用不上
 class JobExperience(Experience):
     __tablename__ = 'job_experience'
 
@@ -99,7 +102,7 @@ class JobExperience(Experience):
     resume_id = db.Column(db.Integer, db.ForeignKey('resume.id'))
     resume = db.relationship('Resume', uselist=False)
 
-
+#简历中的教育经历表，暂时用不上
 class EduExperience(Experience):
     __tablename__ = 'edu_experience'
 
@@ -110,7 +113,7 @@ class EduExperience(Experience):
     resume_id = db.Column(db.Integer, db.ForeignKey('resume.id'))
     resume = db.relationship('Resume', uselist=False)
 
-
+#简历中的项目经历表，暂时用不上
 class ProjectExperice(Experience):
     __tablename__ = 'preject_experience'
 
@@ -122,63 +125,82 @@ class ProjectExperice(Experience):
     resume_id = db.Column(db.Integer, db.ForeignKey('resume.id'))
     resume = db.relationship('Resume', uselist=False)
 
-
 class Company(Base):
-    __tablename__ = 'company'
+    '''企业表映射类
+    '''
 
     id = db.Column(db.Integer, primary_key=True)
+    #企业名称
     name = db.Column(db.String(64), nullable=False, index=True, unique=True)
-    slug = db.Column(db.String(24), nullable=False, index=True, unique=True)
+    #企业logo
     logo = db.Column(db.String(64), nullable=False)
+    #网址
     site = db.Column(db.String(64), nullable=False)
-    contact = db.Column(db.String(24), nullable=False)
+    #邮箱
     email = db.Column(db.String(24), nullable=False)
+    #地址
     location = db.Column(db.String(24), nullable=False)
     # 一句话描述
     description = db.Column(db.String(100))
-    # 关于我们，公司详情描述
+    # 公司详情描述
     about = db.Column(db.String(1024))
     # 公司标签，多个标签用逗号隔开，最多10个
     tags = db.Column(db.String(128))
-    # 公司技术栈，多个技术用逗号隔开，最多10个
-    stack = db.Column(db.String(128))
-    # 团队介绍
+    # 团队介绍为企业规模有多少人
     team_introduction = db.Column(db.String(256))
-    # 公司福利，多个福利用分号隔开，最多 10 个
+    #以下暂时用不上
     welfares = db.Column(db.String(256))
+    stack = db.Column(db.String(128))
+    contact = db.Column(db.String(24), nullable=False)
+    slug = db.Column(db.String(24), nullable=False, index=True, unique=True)
+    #添加用户id外键
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
+    '''
+    返回与企业相关联的用户列表，
+    向User类中添加一个company属性，从而定义反向关系
+    这一属性可替代company_id访问company模型
+
+    '''
     user = db.relationship('User', uselist=False, backref=db.backref('company', uselist=False))
 
     def __repr__(self):
         return '<Company {}>'.format(self.name)
 
-
 class Job(Base):
-    __tablename__ = 'job'
+    '''职位表映射类
+    '''
 
     id = db.Column(db.Integer, primary_key=True)
     # 职位名称
     name = db.Column(db.String(24))
-    salary_low = db.Column(db.Integer, nullable=False)
+   #薪水范围用一个字段
     salary_high = db.Column(db.Integer, nullable=False)
+    #工作地点
     location = db.Column(db.String(24))
     # 职位标签，多个标签用逗号隔开，最多10个
     tags = db.Column(db.String(128))
+    #经验要求，职位要求用一个字段
     experience_requirement = db.Column(db.String(32))
+    #暂用不上
     degree_requirement = db.Column(db.String(32))
+    #投递时间
     is_fulltime = db.Column(db.Boolean, default=True)
-    # 是否在招聘
+    # 是否在招聘上线下线状态
     is_open = db.Column(db.Boolean, default=True)
+    
+    #添加company_id外键，级联删除
     company_id = db.Column(db.Integer, db.ForeignKey('company.id', ondelete='CASCADE'))
+    #与企业表关联,设为false为一对一
     company = db.relationship('Company', uselist=False)
+    #以下字段暂时用不上
     views_count = db.Column(db.Integer, default=0)
-
+    salary_low = db.Column(db.Integer, nullable=False)
     def __repr__(self):
         return '<Job {}>'.format(self.name)
 
-
 class Dilivery(Base):
-    __tablename__ = 'delivery'
+    '''简历投递状态表映射类
+    '''
 
     # 等待企业审核
     STATUS_WAITING = 1
@@ -188,8 +210,10 @@ class Dilivery(Base):
     STATUS_ACCEPT = 3
 
     id = db.Column(db.Integer, primary_key=True)
+    #添加职位id,用户id外键,删除关联数据，与之关联的数据设置为null
     job_id = db.Column(db.Integer, db.ForeignKey('job.id', ondelete='SET NULL'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
+    #默认投递状态为1－等待企业审核
     status = db.Column(db.SmallInteger, default=STATUS_WAITING)
-    # 企业回应
+    # 企业回应,暂时用不上
     response = db.Column(db.String(256))
