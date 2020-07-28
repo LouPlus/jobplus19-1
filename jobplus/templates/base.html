@@ -25,7 +25,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {% if not current_user.is_authenticated %}
-            <li><a href="{#{ url_for('front.userregister') }#}">用户注册</a></li>
+            <li><a href="{{ url_for('front.register') }}">用户注册</a></li>
             <li><a href="{#{ url_for('front.companyregister') }#}">公司注册</a></li>
             <li><a href="{#{ url_for('front.login') }#}">登录</a></li>
           {% else %}
