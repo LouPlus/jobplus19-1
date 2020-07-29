@@ -15,7 +15,7 @@ def register_extensions(app):
 
     @login_manager.user_loader
     def user_loader(id):
-        return 
+        return User.query.get(id) 
 
 
 def register_blueprints(app):
