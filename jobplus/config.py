@@ -1,29 +1,24 @@
-import os
+class BaseConfig(object):
+    SECRET_KEY = 'very secret key'
+    INDEX_PER_PAGE = 9
+    ADMIN_PER_PAGE = 15
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
+
+class DevelopmentConfig(BaseConfig):
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root@localhost:3306/jobplus?charset=utf8'
 
 
-class Base:
-    '''配置类基类
-    '''
-
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'asdfasdf'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+class ProductionConfig(BaseConfig):
+    pass
 
 
-class DevelopConfig(Base):
-    '''开发环境配置类
-    '''
-
-    SQLALCHEMY_DATABASE_URI = 'mysql://root@localhost/jobplus?charset=utf8'
-
-
-class ProduceConfig(Base):
-    '''生产环境配置类
-    '''
-
+class TestingConfig(BaseConfig):
     pass
 
 
 configs = {
-        'dev': DevelopConfig,
-        'pro': ProduceConfig
+    'development': DevelopmentConfig,
+    'production': ProductionConfig,
+    'testing': TestingConfig
 }

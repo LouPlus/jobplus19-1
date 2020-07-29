@@ -1,4 +1,2 @@
 from .front import front
-
-
-blueprint_list = [front, ]
+from .admin import admin
