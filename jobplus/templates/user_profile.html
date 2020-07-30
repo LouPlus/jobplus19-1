@@ -1,0 +1,9 @@
+{%extends "base.html"%}
+
+{% block body %}
+<div class="form">
+
+<h2>登录</h2>
+{{render_form(form,urlfor('front.user_profile'))}}
+</div>
+{% endblock %}
