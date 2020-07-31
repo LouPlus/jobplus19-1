@@ -44,6 +44,7 @@ class User(Base, UserMixin):
     collect_jobs = db.relationship('Job', secondary=user_job)
     #简历名称
     upload_resume_url = db.Column(db.String(64))
+    is_disable = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<User:{}>'.format(self.username)

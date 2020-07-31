@@ -93,6 +93,12 @@ class UserForm(FlaskForm):
         if  User.query.get(self.id.data):
             raise ValidationError('user exist')
 
+    def update_user(self, user):
+        self.populate_obj(user)
+        db.session.add(user)
+        db.session.commit()
+        return user
+
     def create_user(self):
         user = User()
         self.populate_obj(user)
