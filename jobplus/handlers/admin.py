@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for, flash
 from jobplus.decorators import admin_required
 from jobplus.models import User, db
-from jobplus.forms import UserForm
+from jobplus.forms import AdminEditUserForm, AdminCreateUserForm
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -51,7 +51,7 @@ def create_course():
 @admin.route('/users/create', methods=['GET', 'POST'])
 @admin_required
 def create_user():
-    form = UserForm()
+    form = AdminCreateUserForm()
     if form.validate_on_submit():
         form.create_user()
         flash('user创建成功', 'success')
@@ -75,7 +75,7 @@ def edit_course(course_id):
 @admin_required
 def edit_user(user_id):
     user = User.query.get_or_404(user_id)
-    form = UserForm(obj=user)
+    form = AdminEditUserForm(user=user, obj=user)
     if form.validate_on_submit():
         form.update_user(user)
         flash('user更新成功', 'success')
