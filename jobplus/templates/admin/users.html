@@ -6,9 +6,23 @@ Admin - users
 {% endblock %}
 
 {% block operation %}
+{#
 <a href="{{ url_for('admin.create_user') }}" type="button" class="btn btn-primary">
-  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
- add user 
+    <span class="glyphicon glyphicon-plus" aria-hidden="false"></span>
+      添加用户
+</a>
+<a href="{{ url_for('admin.create_company') }}" type="button" class="btn btn-primary">
+    <span class="glyphicon glyphicon-plus" aria-hidden="false"></span>
+      添加职位
+</a>
+#}
+<a href=" " type="button" class="btn btn-primary">
+    <span class="glyphicon glyphicon-plus"></span>
+      添加用户
+</a>
+<a href=" " type="button" class="btn btn-primary">
+    <span class="glyphicon glyphicon-plus"></span>
+      添加职位
 </a>
 {% endblock %}
 
@@ -17,22 +31,26 @@ Admin - users
   <thead>
     <tr>
       <th>ID</th>
-      <th>name</th>
-      <th>operator</th>
+      <th>姓名</th>
+      <th>邮箱</th>
+      <th>简历</th>
+      <th>操作</th>
     </tr>
     <tbody>
       {% for user in pagination.items %}
       <tr>
         <td>{{ user.id }}</td>
         <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.upload_resume_url }}</td>
         <td>
           <div class="btn-group" role="group">
- <a href="{{ url_for('admin.edit_user', userid=user.id) }}" type="button" class="btn btn-default" title?"edit">
-  <span class="glyphicon glyphicon-pencil" title?"edit" aria-hidden="true"></span>
-</a>
-<a href="{{ url_for('admin.delete_user', userid=user.id) }}" type="button" class="btn btn-default">
-  <span class="glyphicon glyphicon-trash" title?"delete" aria-hidden="true"></span>
-</a>
+            <a href="{{ url_for('admin.edit_user', user_id=user.id) }}" type="button" class="btn btn-default" title?"编辑">
+               编辑 
+            </a>
+            <a href="{{ url_for('admin.disable_user', user_id=user.id) }}" type="button" class="btn btn-default">
+                {% if user.is_disable %}启用{% else %}禁用{% endif %}
+            </a>
           </div>
         </td>
       </tr>

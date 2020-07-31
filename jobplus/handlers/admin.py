@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for, flash
 from jobplus.decorators import admin_required
 from jobplus.models import User, db
-from jobplus.forms import UserForm
+from jobplus.forms import AdminEditUserForm, AdminCreateUserForm
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -35,6 +35,7 @@ def users():
     )
     return render_template('admin/users.html', pagination=pagination)
 
+
 '''
 @admin.route('/courses/create', methods=['GET', 'POST'])
 @admin_required
@@ -50,7 +51,7 @@ def create_course():
 @admin.route('/users/create', methods=['GET', 'POST'])
 @admin_required
 def create_user():
-    form = UserForm()
+    form = AdminCreateUserForm()
     if form.validate_on_submit():
         form.create_user()
         flash('user创建成功', 'success')
@@ -70,17 +71,18 @@ def edit_course(course_id):
     return render_template('admin/edit_course.html', form=form, course=course)
 '''
 
-@admin.route('/users/<int:userid>/edit', methods=['GET', 'POST'])
+@admin.route('/users/<int:user_id>/edit', methods=['GET', 'POST'])
 @admin_required
-def edit_user(userid):
-    user = User.query.get_or_404(userid)
-    form = UserForm(obj=user)
+def edit_user(user_id):
+    user = User.query.get_or_404(user_id)
+    form = AdminEditUserForm(user=user, obj=user)
     if form.validate_on_submit():
         form.update_user(user)
         flash('user更新成功', 'success')
         return redirect(url_for('admin.users'))
     return render_template('admin/edit_user.html', form=form, user=user)
 
+'''
 @admin.route('/users/<int:userid>/delete')
 @admin_required
 def delete_user(userid):
@@ -88,4 +90,19 @@ def delete_user(userid):
     db.session.delete(user)
     db.session.commit()
     flash('delete user', 'success')
+    return redirect(url_for('admin.users'))
+'''
+
+@admin.route('/users/<int:user_id>/disable_user', methods=['GET', 'POST'])
+@admin_required
+def disable_user(user_id):
+    user = User.query.get_or_404(user_id)
+    if user.is_disable:
+        user.is_disable = False
+        flash('用户启用成功', 'success')
+    else:
+        user.is_disable = True
+        flash('用户禁用成功', 'success')
+    db.session.add(user)
+    db.session.commit()
     return redirect(url_for('admin.users'))

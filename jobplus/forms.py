@@ -82,7 +82,7 @@ class CourseForm(FlaskForm):
         return course
 '''
 
-class UserForm(FlaskForm):
+class AdminCreateUserForm(FlaskForm):
     id = StringField('user id', validators=[Required()])
     username = StringField('user name', validators=[Required()])
     email = StringField('user email', validators=[Required()])
@@ -91,10 +91,32 @@ class UserForm(FlaskForm):
 
     def validate_id(self, field):
         if  User.query.get(self.id.data):
-            raise ValidationError('user exist')
+            raise ValidationError('user exists.')
 
     def create_user(self):
         user = User()
+        self.populate_obj(user)
+        db.session.add(user)
+        db.session.commit()
+        return user
+    
+
+class AdminEditUserForm(FlaskForm):
+    id = StringField('user id', validators=[Required()])
+    username = StringField('user name', validators=[Required()])
+    email = StringField('user email', validators=[Required()])
+    submit = SubmitField('submit')
+
+    def __init__(self, user=None, *args, **kw):
+        super().__init__(*args, **kw)
+        self.user = user
+
+    def validate_id(self, field):
+        id = self.id.data
+        if self.user.id != int(id) and User.query.get(id):
+            raise ValidationError('user exists.')
+
+    def update_user(self, user):
         self.populate_obj(user)
         db.session.add(user)
         db.session.commit()

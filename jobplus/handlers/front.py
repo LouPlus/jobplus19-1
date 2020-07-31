@@ -31,9 +31,9 @@ def login():
         return redirect(url_for('.index'))
     return render_template('login.html', form=form)
 
-@front.route('/admin/users')
-def adminlogin():
-    return render_template('admin/users.html')
+#@front.route('/admin/users')
+#def adminlogin():
+#    return render_template('admin/users.html')
 
 @front.route('/user_register', methods=['GET', 'POST'])
 def register():

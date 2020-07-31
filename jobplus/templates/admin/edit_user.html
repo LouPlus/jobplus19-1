@@ -3,5 +3,5 @@
 
 {% block admin %}
 <h4>编辑user</h4>
-{{ render_form(form, url_for('admin.edit_user', userid=user.id)) }}
+{{ render_form(form, url_for('admin.edit_user', user_id=user.id)) }}
 {% endblock %}
