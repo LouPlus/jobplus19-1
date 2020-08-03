@@ -1,0 +1,71 @@
+{%extends "base.html" %}
+
+{% block title %}
+  {{ company.name }}
+{% endblock %}
+
+{% block body %}
+   <div class="jumbotron">
+     <img src='{{ company.logo }}' width='120' height='120'>
+     {{ company.name }}
+     {{ company.description }}
+ </div>
+
+  <div class="row">
+  <div class="col-md-8">
+        
+        
+    <ul class="nav nav-tabs">
+       <li class="active"><a href="#home" data-toggle="tab">公司介绍</a></li>
+       <li><a href="#profile" data-toggle="tab">在招职位({{ company.jobs | length }})</a></li>
+    </ul>
+    
+    <div class="tab-content">
+        <div class="tab-pane active" id="home">
+            <p> {{ company.about }}</p>
+        </div>
+        <div class="tab-pane" id="profile">
+    
+      <div class='job-list'>
+        {% for job in company.jobs %}
+          <div class='col-sm-6 col-md-4'>
+            <a href="{{ url_for('job.detail', job_id=job.id) }}">
+            <div class='job-box'>
+              <div class='caption'>
+                <p class='company_name' align='center'><font color='008844'><b>{{ job.name }}</b></font><p>
+                <p><font color='444444'>{{ job.experience_requirement }} | {{ job.degree_requirement }} | {{ job.salary_low }}-{{ job.salary_high }}|发布于 {{ job.created_at}}</font></p>
+              </div>
+            </div>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+ </div>
+
+
+   </div>
+   </div>
+<script>
+  $(function () {
+    $('#myTab a:last').tab('show');
+  })
+  $('#myTab a').click(function (e) {
+  e.preventDefault();
+  $(this).tab('show');
+})
+</script>
+
+
+   <div class="col-md-4">
+         <div class="media">
+              <div class="media-body">
+                  <h4 class="media-heading">
+                      <p> 公司基本信息</p>
+                      <p>{{ company.tags }}</p>
+                      <p>地址：{{ company.location }}</p>
+              </div>
+          </div>
+      </div>
+    </div>
+{% endblock %}
+

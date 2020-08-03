@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import render_company, render_pagination %}
+
+{% block title %}企业列表{% endblock %}
+
+{% block body %}
+  <div class='row'>
+    {% for company in pagination.items %}
+    <div class='col-sm-6 col-md-4 company'>
+       <div class='thumbnail'>
+         <div class="caption">
+         {{ render_company(company) }}
+         </div>
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+{{ render_pagination(pagination, 'company.index') }}
+{% endblock %}

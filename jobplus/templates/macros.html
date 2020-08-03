@@ -1,3 +1,18 @@
+{% macro render_job(job) %}
+      <a href="{{ url_for('job.detail', job_id=job.id) }}" target='_blank'>
+        <p align='center'><font color='008844'><b>{{ job.name }}</b></font><p>
+        <p><font color='444444'>{{ job.experience_requirement }} | {{ job.degree_requirement }} | {{ job.salary_low/1000 }}千-{{ job.salary_high/1000 }}千 |发布于 {{ job.created_at }}</font></p>
+        <p><img src='{{job.company.logo}}' width ='40',height='40'><font color='FF6600'>{{job.company.name}}</font></p>
+      </a>
+{% endmacro%}
+
+{% macro render_company(company) %}
+    <a href="{{ url_for('company.detail', company_id=company.id) }}" target='_blank'>        
+     <img src="{{ company.logo }}" width ='120',height='120' alt='企业logo' class='img-circle'>
+        <p align='center'><font color='008844'><b>{{ company.name }}</b></font><p>
+        <p align='center'>{{ company.jobs | length }} 个热招职位</p>
+{% endmacro%}
+
 {% macro render_form(form, url) %}
 <form method="POST" action="{{ url }}">
   {{ form.csrf_token }}
@@ -37,7 +52,7 @@
       <li class="active"><a href="#">{{page}} <span class="sr-only">(current)</span></a></li>
       {% endif %}
     {% else %}
-      <span class=ellipsis>?</span>
+      <span class=ellipsis></span>
     {% endif %}
   {% endfor %}
   <li{% if not pagination.has_next %} class="disabled"{% endif %}><a href="{{url_for(endpoint, page=pagination.next_num) if pagination.has_next else '#'}}">&raquo;</a></li>

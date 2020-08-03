@@ -1,0 +1,45 @@
+{%extends "base.html" %}
+
+{% block title %}
+  {{ job.name }}
+{% endblock %}
+
+{% block body %}
+  <div class="jumbotron">
+    <h2>{{ job.name }}</h2>
+    <p>{{ job.create_at }}</p>
+    <p>{{ job.create_at }}</p>
+<p> {{ job.salary_low }}-{{ job.salary_high }} 经验{{ job.experience_requirement }} 学历{{ job.degree_requirement }}</p>
+ 
+    <br><br>
+      {% if current_user.is_authenticated %}
+        {% if not job.current_user_is_applied %}
+        <a href='{{ url_for("job.apply", job_id=job.id) }}'>
+           <button type="button" class="btn btn-info">投递简历</button>
+        </a>
+        {% else %}
+           <a href='#'><button type='button' class='btn btn-info'>已投递</button></a>
+        {% endif %}
+      {% endif %}
+                                                                                        <br><br>
+ </div>
+
+  <div class="row">
+    <div class="col-md-8">
+         <p> 职位标签</p>
+          {{ job.tags }}
+          <p>职位描述</p>
+          '#'
+     </div>
+     <div class="col-md-4">
+         <img src='{{job.company.logo}}' width ='80',height='80'>
+         <div class="media">
+              <div class="media-body">
+                  <h4 class="media-heading">{{ job.company.name }}</h4>
+                      {{ job.location }} 
+              </div>
+          </div>
+      </div>
+    </div>
+{% endblock %}
+
