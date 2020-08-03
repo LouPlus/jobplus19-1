@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
+from flask_login import UserMixin,current_user
+
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -173,11 +174,16 @@ class Job(Base):
     #添加company_id外键，级联删除
     company_id = db.Column(db.Integer, db.ForeignKey('company.id', ondelete='CASCADE'))
     #与企业表关联,设为false为一对一
-    company = db.relationship('Company', backref=db.backref('companies'))
+    company = db.relationship('Company', backref=db.backref('jobs'))
     views_count = db.Column(db.Integer, default=0)
     
     def __repr__(self):
         return '<Job {}>'.format(self.name)
+    
+    @property
+    def current_user_is_applied(self):
+        d = Dilivery.query.filter_by(job_id=self.id, user_id=current_user.id).first()
+        return d is not None
 
 
 class Dilivery(Base):
@@ -195,6 +201,4 @@ class Dilivery(Base):
     job_id = db.Column(db.Integer, db.ForeignKey('job.id', ondelete='SET NULL'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
     # 默认投递状态为1－等待企业审核
-    status = db.Column(db.SmallInteger, default=STATUS_WAITING)
-    # 企业回应,暂时用不上
     response = db.Column(db.String(256))
