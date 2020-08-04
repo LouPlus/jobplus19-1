@@ -21,3 +21,18 @@ a:visited {
 .nav-pagination {
   text-align: center;
 }
+
+.company img {
+    height: 120px !important;
+}
+
+
+.job img {
+    height: 40px !important;
+   
+}
+
+.company_longname{
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

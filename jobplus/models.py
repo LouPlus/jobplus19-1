@@ -66,6 +66,10 @@ class User(Base, UserMixin):
         return self.role == self.ROLE_ADMIN
 
     @property
+    def is_persional(self):
+        return self.role == self.ROLE_USER
+
+    @property
     def is_company(self):
         return self.role == self.ROLE_COMPANY
 
