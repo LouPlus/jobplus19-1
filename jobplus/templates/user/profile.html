@@ -4,12 +4,11 @@
 <div class="form">
 
 <h2>个人信息更新</h2>
-
-<div align="left">
-{{render_form(form,url_for('user.profile'))}}
-</div>
-<div align="right">
-<a href="{{ url_for('front.index') }}" class="btn btn-default">取消</a>
-</div>
+ <div align="left" >
+   {{render_form(form,url_for('user.profile'))}}
+ </div>
+ <div align="right">
+  <a href="{{ url_for('front.index') }}" class="btn btn-default">取消</a>
+ </div>
 </div>
 {% endblock %}

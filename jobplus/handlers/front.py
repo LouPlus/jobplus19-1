@@ -40,12 +40,11 @@ def login():
         login_user(user, form.remember_me.data)
         flash('you have logged in', 'success')
         
-        if user.is_company:
+        if user.is_company and not user.company:
             return redirect(url_for('company.profile'))
-        elif user.is_admin:
-            return redirect(url_for('.index'))
-        else:
+        if user.is_persional and not user.company:
             return redirect(url_for('user.profile'))
+        return redirect(url_for('.index'))
     return render_template('login.html', form=form)
 
 @front.route('/admin/users')

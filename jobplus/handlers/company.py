@@ -29,6 +29,12 @@ def index():
             )
     return render_template('company/index.html', pagination=pagination)
 
+@company.route('/myprofile/<int:company_id>')
+@login_required
+def myprofile(company_id):
+    company = Company.query.get(company_id)
+    return render_template('company/myprofile.html',company=company)
+
 @company.route('/<int:company_id>')
 def detail(company_id):
     company = Company.query.get_or_404(company_id)

@@ -33,7 +33,7 @@
   
         </ul> 
         <ul class="nav navbar-nav navbar-right">
-            {% if not current_user.is_authenticated %}
+          {% if not current_user.is_authenticated %}
             <li><a href="{{ url_for('front.register') }}">用户注册</a></li>
             <li><a href="{{ url_for('front.company_register') }}">公司注册</a></li>
             <li><a href="{{ url_for('front.login') }}">登录</a></li>
@@ -42,9 +42,12 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="username">{{ current_user.username }}</span><span class="caret"></span></a>
               <ul class='dropdown-menu'>
                 {% if current_user.is_company %}
-                <li><a href="{#{ url_for('company.profile', company_id=current_user.id) }#}">我的主页</a></li>
+                  <li><a href="{{ url_for('company.myprofile', company_id=current_user.id) }}">我的主页</a></li>
+                  <li><a href="{{ url_for('company.profile') }}">修改个人信息</a></li>
+
                 {% else %}
-                <li><a href="{#{ url_for('user.profile', user_id=current_user.id) }#}">我的主页</a></li>
+                  <li><a href="{{ url_for('user.myprofile', user_id=current_user.id) }}">我的主页</a></li>
+                  <li><a href="{{ url_for('user.profile') }}">修改个人信息</a></li>
 
                 {% endif %}
                 <li role='separator' class='divider'></li>
