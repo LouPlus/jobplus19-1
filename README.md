@@ -27,8 +27,8 @@ run()
 在虚拟环境中运行startapp.sh启动应用  
 应用访问地址：https//127.0.0.1:3333  
 
-## 开发者
-Clark  
-Cui  
-安西助教  
-排名不分前后  
+## Contributors 
+
+* [助教 - 安西教练](https://github.com/Manchangdx)
+* [Clark](https://github.com/Kisslfcr)
+* [翠翠](https://github.com/huxinying)
