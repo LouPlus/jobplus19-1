@@ -1,0 +1,70 @@
+{% extends "admin/com_index.html" %}
+{% from "macros.html" import render_pagination %}
+
+{% block title %}
+Admin - dilivery
+{% endblock %}
+
+{% block operation %}
+{#
+<a href="{{ url_for('admin.create_user') }}" type="button" class="btn btn-primary">
+    <span class="glyphicon glyphicon-plus" aria-hidden="false"></span>
+      添加用户
+</a>
+<a href="{{ url_for('admin.create_company') }}" type="button" class="btn btn-primary">
+    <span class="glyphicon glyphicon-plus" aria-hidden="false"></span>
+      添加职位
+</a>
+#}
+<a href=" {{ url_for('admin.com_dilivery') }} " type="button" class="btn btn-primary">
+      未处理
+</a>
+<a href=" {{ url_for('admin.com_diliveryr') }} " type="button" class="btn btn-primary">
+      已拒绝 
+</a>
+<a href=" " type="button" class="btn btn-primary">
+      已接受
+</a>
+{% endblock %}
+
+{% block admin %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>user_id</th>
+      <th>时间</th>
+      <th>查看</th>
+      <th>处理</th>
+    </tr>
+    <tbody>
+      {% for dilivery in pagination.items %}
+      <tr>
+        <td>{{ dilivery.id }}</td>
+        <td>{{ dilivery.user_id }}</td>
+        <td>{{ dilivery.updated_at }}</td>
+        <td>
+          <div class="btn-group" role="group">
+                <a href=" " type="button" class="btn btn-default">
+                查看
+                </a>
+          </div>
+        </td>
+        <td>
+          <div class="btn-group" role="group">
+                <a href="{{ url_for('admin.dilivery_interview', dilivery_id=dilivery.id) }}" type="button" class="btn btn-default">
+                面试
+                </a>
+                <a href="{{ url_for('admin.dilivery_reject', dilivery_id=dilivery.id) }}" type="button" class="btn btn-default">
+                拒绝
+                </a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </thead>
+</table>
+
+{{ render_pagination(pagination, 'admin.com_jobs') }}
+{% endblock %}
