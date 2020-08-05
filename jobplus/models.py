@@ -204,5 +204,6 @@ class Dilivery(Base):
     # 添加职位id,用户id外键,删除关联数据，与之关联的数据设置为null
     job_id = db.Column(db.Integer, db.ForeignKey('job.id', ondelete='SET NULL'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
+    status = db.Column(db.SmallInteger, default=STATUS_WAITING)
     # 默认投递状态为1－等待企业审核
     response = db.Column(db.String(256))

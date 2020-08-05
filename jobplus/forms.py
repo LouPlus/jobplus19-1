@@ -1,9 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import IntegerField
 from wtforms.validators import Length, Email, EqualTo, DataRequired,Required,URL
 from wtforms import ValidationError
 
-from .models import User,Company,db
+from jobplus.models import db, User, Job, Company
 
 
 class LoginForm(FlaskForm):
@@ -64,30 +65,6 @@ class RegisterForm(FlaskForm):
         db.session.add(user)
         db.session.commit()
         return user
-
-class CourseForm(FlaskForm):
-    name = StringField('课程名称', validators=[Required(), Length(5, 32)])
-    description = TextAreaField('课程简介', validators=[Required(), Length(20, 256)])
-    image_url = StringField('封面图片地址', validators=[Required(), URL()])
-    author_id = IntegerField('作者ID', validators=[Required(), NumberRange(min=1, message='无效的用户ID')])
-    submit = SubmitField('提交')
-
-    def validate_author_id(self, field):
-        if not User.query.get(self.author_id.data):
-            raise ValidationError('用户不存在')
-
-    def create_course(self):
-        course = Course()
-        self.populate_obj(course)
-        db.session.add(course)
-        db.session.commit()
-        return course
-
-    def update_course(self, course):
-        self.populate_obj(course)
-        db.session.add(course)
-        db.session.commit()
-        return course
 '''
 
 class AdminCreateUserForm(FlaskForm):
@@ -171,3 +148,41 @@ class UserProfileForm(FlaskForm):
         db.session.add(user)
         db.session.commit()
 
+class AdminCreateJobForm(FlaskForm):
+    id = StringField('user id', validators=[Required()])
+    username = StringField('user name', validators=[Required()])
+    email = StringField('user email', validators=[Required()])
+    password = StringField('user password', validators=[Required()])
+    submit = SubmitField('submit')
+
+    def validate_id(self, field):
+        if  User.query.get(self.id.data):
+            raise ValidationError('user exists.')
+
+    def create_user(self):
+        user = User()
+        self.populate_obj(user)
+        db.session.add(user)
+        db.session.commit()
+        return user
+    
+
+class AdminEditJobForm(FlaskForm):
+    name = StringField('职位名称', validators=[Required()])
+    location = StringField('工作地点', validators=[Required()])
+    salary_low = IntegerField('工资下限', validators=[Required()])
+    salary_high = IntegerField('工资上限', validators=[Required()])
+    submit = SubmitField('submit')
+
+    def update_job(self, job):
+        self.populate_obj(job)
+        db.session.add(job)
+        db.session.commit()
+        return job
+
+    def create_job(self):
+        job = Job()
+        self.populate_obj(job)
+        db.session.add(job)
+        db.session.commit()
+        return job

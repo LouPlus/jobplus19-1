@@ -22,11 +22,11 @@ def register_extensions(app):
 
 def register_blueprints(app):
     from .handlers import front, admin,user,company,job
-    app.register_blueprint(front)
     app.register_blueprint(admin)
     app.register_blueprint(user)
     app.register_blueprint(company)
     app.register_blueprint(job)
+    app.register_blueprint(front)
 
 def create_app(config):
     app = Flask(__name__)
